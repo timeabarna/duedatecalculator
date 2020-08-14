@@ -12,6 +12,7 @@ public class DueDateCalculatorTest {
     private static final long ONE_HOUR_TURNAROUND_TIME = 1L;
     private static final long NINE_HOUR_TURNAROUND_TIME = 9L;
     private static final long SIXTEEN_HOUR_TURNAROUND_TIME = 16L;
+    private static final long EIGHTY_HOUR_TURNAROUND_TIME = 80L;
     private static final LocalDateTime WEEKEND_DATE =
             LocalDateTime.of(2020, Month.AUGUST, 1, 10, 8, 55);
     private static final LocalDateTime AUG_3RD_MONDAY_BEFORE_NINE =
@@ -36,6 +37,10 @@ public class DueDateCalculatorTest {
             LocalDateTime.of(2020, Month.AUGUST, 10, 9, 15, 33);
     private static final LocalDateTime AUG_11TH_TUESDAY_NINE_FIFTEEN =
             LocalDateTime.of(2020, Month.AUGUST, 11, 9, 15, 33);
+    private static final LocalDateTime JUL_31ST_FRIDAY_ONE_PM =
+            LocalDateTime.of(2020, Month.JULY, 31, 13, 0, 33);
+    private static final LocalDateTime AUG_14TH_FRIDAY_ONE_PM =
+            LocalDateTime.of(2020, Month.AUGUST, 14, 13, 0, 33);
     private static final LocalDateTime XMAS =
             LocalDateTime.of(2020, 12, 25, 9, 15, 42);
     private static final LocalDateTime WORKING_SATURDAY =
@@ -124,6 +129,12 @@ public class DueDateCalculatorTest {
     public void whenAddSixteenHourToWeekdayAfterFour_ShouldBeTwoWorkingDaysAfter() {
         assertEquals(AUG_5TH_WEDNESDAY_FOUR_FIFTEEN,
                 dueDateCalculator.calculateDueDate(AUG_3RD_MONDAY_FOUR_FIFTEEN, SIXTEEN_HOUR_TURNAROUND_TIME));
+    }
+
+    @Test
+    public void whenAddEightyHourToFridayBeforeFour_ShouldBeTenWorkingDaysAfter() {
+        assertEquals(AUG_14TH_FRIDAY_ONE_PM,
+                dueDateCalculator.calculateDueDate(JUL_31ST_FRIDAY_ONE_PM, EIGHTY_HOUR_TURNAROUND_TIME));
     }
 
     @Test

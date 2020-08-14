@@ -19,19 +19,18 @@ public class DueDateCalculator {
     }
 
     private LocalDateTime calculate(LocalDateTime submissionDate, long turnaroundTime) {
-        long days = turnaroundTime / 8;
-        long hours = turnaroundTime - days * 8;
+        LocalDateTime dateWithTurnaroundAdded = submissionDate;
 
-        LocalDateTime dateWithTurnaroundAdded = submissionDate.plusDays(days);
-        dateWithTurnaroundAdded = dateWithTurnaroundAdded.plusHours(hours);
-        dateWithTurnaroundAdded = shiftWorkday(dateWithTurnaroundAdded);
-        dateWithTurnaroundAdded = shiftWeekend(dateWithTurnaroundAdded);
-
-        return dateWithTurnaroundAdded;
-    }
+        for (int i = 0; i < turnaroundTime; i++) {
+            dateWithTurnaroundAdded = dateWithTurnaroundAdded.plusHours(1L);
+            dateWithTurnaroundAdded = shiftWorkday(dateWithTurnaroundAdded);
+            dateWithTurnaroundAdded = shiftWeekend(dateWithTurnaroundAdded);
+        }
+            return dateWithTurnaroundAdded;
+        }
 
     private LocalDateTime shiftWorkday(LocalDateTime dateWithTurnaroundAdded) {
-        if (isBetweenNineAndFive(dateWithTurnaroundAdded)) {
+        if (!isBetweenNineAndFive(dateWithTurnaroundAdded)) {
             dateWithTurnaroundAdded = dateWithTurnaroundAdded.plusHours(NON_WORK_HOURS);
         }
         return dateWithTurnaroundAdded;
@@ -68,7 +67,7 @@ public class DueDateCalculator {
 
     private boolean isBetweenNineAndFive(LocalDateTime dateToBeValidated) {
         LocalTime timeFromSubmissionDate = dateToBeValidated.toLocalTime();
-        return timeFromSubmissionDate.isBefore(NINE_O_CLOCK) || timeFromSubmissionDate.isAfter(FIVE_O_CLOCK);
+        return !timeFromSubmissionDate.isBefore(NINE_O_CLOCK) && !timeFromSubmissionDate.isAfter(FIVE_O_CLOCK);
     }
 
     private void validateIsWeekend(LocalDateTime dateTobeValidated) {
@@ -78,8 +77,8 @@ public class DueDateCalculator {
     }
 
     private void validateIsBetweenNineAndFive(LocalDateTime dateToBeValidated) {
-        if (isBetweenNineAndFive(dateToBeValidated)) {
-            throw new IllegalArgumentException("Submission hour mast be between 9 AM and 5 PM");
+        if (!isBetweenNineAndFive(dateToBeValidated)) {
+            throw new IllegalArgumentException("Submission hour must be between 9 AM and 5 PM");
         }
     }
 }
