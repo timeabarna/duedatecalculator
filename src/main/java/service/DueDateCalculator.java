@@ -21,12 +21,14 @@ public class DueDateCalculator {
     private LocalDateTime calculate(LocalDateTime submissionDate, long turnaroundTime) {
         LocalDateTime dateWithTurnaroundAdded = submissionDate;
 
-        for (int i = 0; i < turnaroundTime; i++) {
+        int counter = 0;
+        while ( counter < turnaroundTime) {
             dateWithTurnaroundAdded = dateWithTurnaroundAdded.plusHours(1L);
-            dateWithTurnaroundAdded = shiftWorkday(dateWithTurnaroundAdded);
-            dateWithTurnaroundAdded = shiftWeekend(dateWithTurnaroundAdded);
+            if (isBetweenNineAndFive(dateWithTurnaroundAdded) && !isWeekend(dateWithTurnaroundAdded)) {
+                counter++;
+            }
         }
-            return dateWithTurnaroundAdded;
+                return dateWithTurnaroundAdded;
         }
 
     private LocalDateTime shiftWorkday(LocalDateTime dateWithTurnaroundAdded) {
