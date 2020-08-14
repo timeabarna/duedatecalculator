@@ -28,7 +28,7 @@ public class DueDateCalculator {
                 counter++;
             }
         }
-                return dateWithTurnaroundAdded;
+        return dateWithTurnaroundAdded;
         }
 
     private LocalDateTime shiftWorkday(LocalDateTime dateWithTurnaroundAdded) {
